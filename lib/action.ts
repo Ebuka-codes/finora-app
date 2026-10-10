@@ -1,12 +1,15 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { Credentials, FormState } from "@/app/_components/shared/type";
 import { auth } from "@/auth";
-import { parseServerActionResponse } from "./utils";
+import {
+  generateReference,
+  generateRquestId,
+  parseServerActionResponse,
+} from "./utils";
 import z from "zod";
-import toast from "react-hot-toast";
-import { signOut } from "next-auth/react";
+
+import { Credentials, FormState } from "@/type";
 
 export async function handleDeposit(
   prevState: FormState,
@@ -20,6 +23,7 @@ export async function handleDeposit(
         ...prevState,
         error: "You are not authenticated",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -30,6 +34,7 @@ export async function handleDeposit(
         ...prevState,
         error: "Account not found",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -38,7 +43,7 @@ export async function handleDeposit(
     });
 
     const result = formSchema.safeParse({
-      amount: formData.get("amount"),
+      amount: Number(formData.get("amount")?.toString().replace(/,/g, "")),
     });
 
     if (!result.success) {
@@ -46,33 +51,33 @@ export async function handleDeposit(
         ...prevState,
         error: result.error.issues[0].message,
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
     const res = await depositeAmount(result.data.amount, account.data.id);
 
     if (res.status !== "SUCCESS") {
-      toast.success("Deposit failed", {
-        style: {
-          fontSize: "14px",
-        },
-      });
       return {
         ...prevState,
         error: "Deposit failed",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
     return {
       ...prevState,
       error: "",
       status: "SUCCESS",
+      requestId: generateRquestId(),
     };
   } catch (error) {
     return {
       ...prevState,
-      error: "Unexpected error occurred",
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
       status: "ERROR",
+      requestId: generateRquestId(),
     };
   }
 }
@@ -89,20 +94,21 @@ export async function handleTransfer(
         ...prevState,
         error: "You are not authenticated",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
     const formSchema = z.object({
       accountNumber: z
         .string()
-        .length(10, "Account number should be 10 digits"),
+        .length(10, "Account number should be 10 characters"),
 
-      amount: z.coerce.number().positive("Amount must be greater than 0"),
+      amount: z.coerce.number().min(100, "Minimum transfer amount is 100"),
     });
 
     const result = formSchema.safeParse({
       accountNumber: formData.get("accountNumber"),
-      amount: formData.get("amount"),
+      amount: Number(formData.get("amount")?.toString().replace(/,/g, "")),
     });
 
     if (!result.success) {
@@ -110,6 +116,7 @@ export async function handleTransfer(
         ...prevState,
         error: result.error.issues[0].message,
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -123,6 +130,7 @@ export async function handleTransfer(
         ...prevState,
         error: "Receiver account not found",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -133,6 +141,7 @@ export async function handleTransfer(
         ...prevState,
         error: "Sender account not found",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -147,6 +156,7 @@ export async function handleTransfer(
         ...prevState,
         error: res.error || "Transfer failed",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -154,12 +164,15 @@ export async function handleTransfer(
       ...prevState,
       error: "",
       status: "SUCCESS",
+      requestId: generateRquestId(),
     };
   } catch (error) {
     return {
       ...prevState,
-      error: "Unexpected error occurred",
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
       status: "ERROR",
+      requestId: generateRquestId(),
     };
   }
 }
@@ -176,58 +189,46 @@ export async function handleCloseAccount(
         ...prevState,
         error: "You are not authenticated",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
-    const formSchema = z.object({
-      accountNumber: z
-        .string()
-        .length(10, "Account number should be 10 digits"),
-    });
+    console.log("formData", formData.get("accountNumber"));
 
-    const result = formSchema.safeParse({
-      accountNumber: formData.get("accountNumber"),
-    });
-
-    if (!result.success) {
-      return {
-        ...prevState,
-        error: result.error.issues[0].message,
-        status: "ERROR",
-      };
-    }
-
-    const account = await getAccountByProps(
+    const inputAccount = await getAccountByProps(
       "accountNumber",
-      result.data.accountNumber,
+      Number(formData.get("accountNumber")),
     );
 
-    if (!account.data) {
+    if (!inputAccount.data) {
       return {
         ...prevState,
-        error: "Account not found",
+        error: "Account number does not match",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
-    console.log();
+    const userAccount = await getAccountByProps("email", session.user.email);
 
     if (
-      account.data.accountNumber !== Number(result.data.accountNumber.trim())
+      inputAccount.data.accountNumber !== Number(userAccount.data.accountNumber)
     ) {
       return {
         ...prevState,
-        error: "Account Number does not exist",
+        error: "Account number does not match",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
-    const res = await closeAccount(account.data.id);
+    const res = await closeAccount(userAccount.data.id);
 
     if (res.status !== "SUCCESS") {
       return {
         ...prevState,
         error: res.error || "Close Account failed",
         status: "ERROR",
+        requestId: generateRquestId(),
       };
     }
 
@@ -235,16 +236,51 @@ export async function handleCloseAccount(
       ...prevState,
       error: "",
       status: "SUCCESS",
+      requestId: generateRquestId(),
     };
   } catch (error) {
     return {
       ...prevState,
-      error: "Unexpected error occurred",
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
       status: "ERROR",
+      requestId: generateRquestId(),
     };
   }
 }
 
+export async function getAllMovement(
+  accountId: string,
+  page = 1,
+  itemsPerPage: number,
+) {
+  const from = (page - 1) * itemsPerPage;
+  const to = from + itemsPerPage - 1;
+
+  const supabase = await createClient();
+
+  const { data, error, count } = await supabase
+    .from("Movements")
+    .select(
+      `
+        *,
+        counterparty:Accounts!Movements_counterpartyAccountId_fkey (
+          id,
+          accountName
+        )
+      `,
+      { count: "exact" },
+    )
+    .eq("accountId", accountId)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return { data, error, count };
+}
 export async function getMovementByAccountId(accountId: string) {
   const supabase = await createClient();
 
@@ -253,6 +289,7 @@ export async function getMovementByAccountId(accountId: string) {
     .select("*")
     .eq("accountId", accountId)
     .order("created_at", { ascending: false });
+
   if (error) {
     throw new Error(error.message);
   }
@@ -274,8 +311,11 @@ export async function depositeAmount(amount: number, accountId: string) {
     .insert([
       {
         accountId: accountId,
+        counterpartyAccountId: accountId,
         amount: amount,
-        status: "Credited",
+        status: "CREDITED",
+        type: "DEPOSIT",
+        reference: generateReference(),
       },
     ])
     .select();
@@ -286,7 +326,7 @@ export async function depositeAmount(amount: number, accountId: string) {
       status: "ERROR",
     });
   }
-  revalidatePath("/");
+  revalidatePath("/account");
   return {
     data,
     error: "",
@@ -315,28 +355,26 @@ export async function transferAmount(
       p_amount: amount,
       p_sender_id: senderId,
       p_receiver_id: receiverId,
+      p_reference: generateReference(),
     });
 
     if (error) {
-      console.error("Transfer error:", error);
-
       return parseServerActionResponse({
         error: error.message,
         status: "ERROR",
       });
     }
 
-    revalidatePath("/");
+    revalidatePath("/account");
 
     return parseServerActionResponse({
       error: "",
       status: "SUCCESS",
     });
   } catch (error) {
-    console.error("Transfer error:", error);
-
     return parseServerActionResponse({
-      error: "Transfer failed",
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
       status: "ERROR",
     });
   }
@@ -358,12 +396,10 @@ export async function closeAccount(accountId: string) {
     const { error } = await supabase
       .from("Accounts")
       .update({
-        status: "disabled",
+        status: "DISABLED",
       })
       .eq("id", accountId);
     if (error) {
-      console.error("Close Account error:", error);
-
       return parseServerActionResponse({
         error: error.message,
         status: "ERROR",
@@ -375,21 +411,20 @@ export async function closeAccount(accountId: string) {
       status: "SUCCESS",
     });
   } catch (error) {
-    console.error("Close Account error:", error);
-
     return parseServerActionResponse({
-      error: "Close Account failed",
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
       status: "ERROR",
     });
   }
 }
 
-export async function getAccountByProps(type: string, email: string) {
+export async function getAccountByProps(type: string, props: string | number) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("Accounts")
     .select("*")
-    .eq(type, email)
+    .eq(type, props)
     .maybeSingle();
   if (error) {
     throw new Error(error.message);
@@ -417,7 +452,7 @@ export async function createAccount(credential: Credentials) {
         accountName: credential.name,
         accountNumber: Math.floor(Math.random() * 10000000000).toString(),
         image: credential.image,
-        status: "active",
+        status: "ACTIVE",
       },
     ])
     .select()
@@ -429,9 +464,7 @@ export async function createAccount(credential: Credentials) {
       error,
     };
   }
-
-  revalidatePath("/");
-
+  revalidatePath("/account");
   return {
     data,
     error: null,

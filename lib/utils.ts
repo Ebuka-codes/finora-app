@@ -1,51 +1,68 @@
-// prettier-ignore
-const monthData = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
-const days = [
-  "Monday",
-  "Tuesday",
-  "Wenesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
+import crypto from "crypto";
+import { MovementItemProps } from "@/type";
+
+const monthData = [
+  "January",
+  "Febuary",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
+
+export const generateReference = () => {
+  return `${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
+};
+
+export const generateRquestId = () => {
+  return `${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
+};
+
+export const groupMovementsByDate = (movements: MovementItemProps[]) => {
+  return movements.reduce(
+    (groups, movement) => {
+      const dateKey = new Date(movement.created_at).toISOString().split("T")[0];
+
+      if (!groups[dateKey]) {
+        groups[dateKey] = [];
+      }
+
+      groups[dateKey].push(movement);
+
+      return groups;
+    },
+    {} as Record<string, MovementItemProps[]>,
+  );
+};
 
 export const parseServerActionResponse = <T>(response: T) => {
   return JSON.parse(JSON.stringify(response));
 };
 
-export const starLogoutTimer = function () {
-  let min;
-  let sec;
-  const tick = function () {
-    min = String(Math.trunc(time / 60)).padStart(2, "0");
-    sec = String(time % 60).padStart(2, "0");
-    if (time === 0) {
-      clearInterval(timer);
-    }
-    time--;
-  };
-  let time = 30;
-  tick();
-  const timer = setInterval(tick, 1000);
-  return { timer, min, sec };
-};
-
-export const formattedDateTime = (date: Date | string) => {
+export const formattedDate = (date: Date | string) => {
   const inputDate = new Date(date);
 
-  const originalHour = inputDate.getUTCHours();
-  const minute = inputDate.getUTCMinutes();
-
-  const period = originalHour >= 12 ? "PM" : "AM";
-
-  const hour = originalHour % 12 || 12;
-
-  return `${inputDate.getUTCDate()} ${
+  return `${inputDate.getUTCDate().toString().padStart(2, "0")} ${
     monthData[inputDate.getUTCMonth()]
-  }, ${days[inputDate.getUTCDay()]} - ${(hour + 1)
-    .toString()
-    .padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${period}`;
+  }, ${inputDate.getUTCFullYear()} ${getCurrentTime(date).time} ${getCurrentTime(date).period}`;
+};
+
+export const getCurrentTime = (date: Date | string) => {
+  const now = new Date(date);
+
+  return {
+    time: now.toLocaleTimeString("en-NG", {
+      hour: "numeric",
+      minute: "2-digit",
+    }),
+    period: now.getHours() >= 12 ? "PM" : "AM",
+  };
 };
 
 export const formattedAmount = (amount: number) => {

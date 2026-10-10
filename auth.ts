@@ -1,20 +1,19 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { createAccount } from "./lib/action";
-import { starLogoutTimer } from "./lib/utils";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-      authorization: {
-        params: {
-          prompt: "select_account",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      // authorization: {
+      //   params: {
+      //     prompt: "select_account",
+      //     access_type: "offline",
+      //     response_type: "code",
+      //   },
+      // },
     }),
   ],
 
@@ -30,8 +29,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name ?? "",
           image: user.image ?? "",
         });
-
-        starLogoutTimer();
 
         return true;
       } catch (error) {

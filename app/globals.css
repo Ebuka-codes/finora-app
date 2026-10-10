@@ -1,8 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@custom-variant dark (&:where(.dark, .dark *));
 
 html {
-  font-size: 70.5%;
+  font-size: 74.5%;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
@@ -12,6 +13,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 
 /* Chrome, Safari, Edge, Opera */
