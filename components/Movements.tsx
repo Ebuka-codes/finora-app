@@ -40,7 +40,7 @@ const Movements = async ({ searchParams }: accountProps) => {
   const movements = movementResponse ?? [];
 
   return (
-    <section className="min-w-0 overflow-y-auto rounded-3xl border border-[#f0f1f2f7] bg-white px-5 scrollbar-thin">
+    <section className="min-w-0 overflow-y-auto rounded-3xl border  border-stone-200 bg-white px-5 scrollbar-thin">
       <div className="mb-2 flex items-center justify-between gap-4 border-b border-stone-100 pb-5 pt-7">
         <div>
           <h2 className="text-[15px] font-semibold text-slate-900 sm:text-[18px]">
