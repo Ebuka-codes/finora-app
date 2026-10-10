@@ -9,7 +9,7 @@ type accountProps = {
 
 const Movements = async ({ searchParams }: accountProps) => {
   const params = await searchParams;
-  const itemsPerPage = 7;
+  const itemsPerPage = 10;
 
   const currentPage = Math.max(
     1,

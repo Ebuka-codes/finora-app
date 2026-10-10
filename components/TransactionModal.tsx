@@ -1,8 +1,7 @@
 "use client";
 import { formattedAmount, formattedDate } from "@/lib/utils";
 import { MovementItemProps } from "@/type";
-import jsPDF from "jspdf";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 const TransactionModal = ({
   movement,
@@ -49,7 +48,7 @@ const TransactionModal = ({
           data-state={isOpen ? "open" : "closed"}
           className="relative data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 bg-white z-20000  max-w-screen shadow-md rounded-2xl mx-auto w-[90%] lg:w-[95%] md:w-[70%] sm:w-[70%] p-0 gap-0 pb-5 block! pointer-none:"
         >
-          <div className="flex flex-col gap-1.5 text-left py-5 px-5  md:px-8 border-b border-b-stone-200">
+          <div className="flex flex-col gap-1.5 text-left py-5 px-4  md:px-6 border-b border-b-stone-200">
             <h2 className="text-[15px] leading-none font-medium">
               <p className="wrap-break-word">
                 <span>Transaction Details</span>
