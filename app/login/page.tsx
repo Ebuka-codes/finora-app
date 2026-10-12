@@ -12,7 +12,7 @@ const Login = async () => {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="rounded-3xl border border-stone-200 bg-white p-7 sm:p-10">
+        <div className="rounded-3xl shadow-sm bg-white p-7 sm:p-10">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-[14px] font-bold text-white">
               F.

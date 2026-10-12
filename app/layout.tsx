@@ -37,7 +37,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }}></script>
       </head>
-      <body className={`${inter.variable} font-sans bg-[#f4f2ee85]`}>
+      <body className={`${inter.variable} font-sans bg-[#f5f7f8]`}>
         <DarkModeProvider>
           <div>{children}</div>
         </DarkModeProvider>

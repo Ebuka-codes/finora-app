@@ -16,7 +16,7 @@ const UserDropdown = ({
   return (
     <div
       data-state={data}
-      className="dropdown absolute data-[state=open]:animate-in top-17 md:right-50 shadow-md data-[state=closed]:animate-out data-[state=open]:zoom-in-95 data-[state=open]:animate-out-95 right-4 z-50 w-80 rounded-xl border transition-all border-stone-200 bg-white p-4 "
+      className="dropdown absolute data-[state=open]:animate-in top-17 md:right-50 shadow-lg data-[state=closed]:animate-out data-[state=open]:zoom-in-95 data-[state=open]:animate-out-95 right-4 z-50 w-80 rounded-xl border transition-all border-stone-200 bg-white p-4 "
     >
       <div className="flex gap-4 mb-5">
         <div className="flex text-[12px] h-11 shrink-0 w-11 items-center font-medium justify-center text-white rounded-full bg-emerald-500">

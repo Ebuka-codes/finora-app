@@ -48,7 +48,7 @@ const TransactionModal = ({
           data-state={isOpen ? "open" : "closed"}
           className="relative data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 bg-white z-20000  max-w-screen shadow-md rounded-2xl mx-auto w-[90%] lg:w-[95%] md:w-[70%] sm:w-[70%] p-0 gap-0 pb-5 block! pointer-none:"
         >
-          <div className="flex flex-col gap-1.5 text-left py-5 px-4  md:px-6 border-b border-b-stone-200">
+          <div className="flex flex-col gap-1.5 text-left py-5 px-4 md:px-6 border-b border-b-stone-200">
             <h2 className="text-[15px] leading-none font-medium">
               <p className="wrap-break-word">
                 <span>Transaction Details</span>
@@ -61,7 +61,7 @@ const TransactionModal = ({
             {formattedDate(movement.created_at)}
           </h2>
 
-          <div className="rounded-lg bg-slate-50 px-6 mx-5 my-6">
+          <div className="rounded-lg bg-stone-50 px-6 mx-5 my-6">
             <div className="grid grid-cols-3 border-b border-stone-100 py-6 align-middle text-[13px]">
               <span className="block text-[#667085]">Amount</span>
               <span className="col-span-2 block max-w-[80%] text-end font-semibold text-[#363A43]">
