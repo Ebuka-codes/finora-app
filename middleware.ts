@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const session = await auth();
+
   const { pathname } = request.nextUrl;
 
   if (!session?.user && pathname.startsWith("/account")) {
@@ -22,4 +23,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/", "/account/:path*", "/login"],
+  runtime: "nodejs",
 };

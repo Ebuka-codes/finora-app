@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import { MovementItemProps } from "@/type";
 
 const monthData = [
@@ -15,14 +14,6 @@ const monthData = [
   "November",
   "December",
 ];
-
-export const generateReference = () => {
-  return `${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
-};
-
-export const generateRquestId = () => {
-  return `${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
-};
 
 export const groupMovementsByDate = (movements: MovementItemProps[]) => {
   return movements.reduce(

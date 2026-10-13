@@ -50,7 +50,7 @@ const Movements = async ({ searchParams }: accountProps) => {
 
         <button
           type="button"
-          className={`shrink-0  rounded-3xl bg-stone-50 p-1 cursor-pointer px-3 py-2 text-[11px] sm:text-[12px] font-medium transition `}
+          className={`shrink-0  rounded-3xl bg-stone-50 p-1 px-3 py-2 text-[11px] sm:text-[12px] font-medium transition `}
         >
           {movements.length + 1 >= 100
             ? "99+ Transactions"

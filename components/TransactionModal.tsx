@@ -61,7 +61,7 @@ const TransactionModal = ({
             {formattedDate(movement.created_at)}
           </h2>
 
-          <div className="rounded-lg bg-stone-50 px-6 mx-5 my-6">
+          <div className="rounded-lg bg-stone-100 px-6 mx-5 my-6">
             <div className="grid grid-cols-3 border-b border-stone-100 py-6 align-middle text-[13px]">
               <span className="block text-[#667085]">Amount</span>
               <span className="col-span-2 block max-w-[80%] text-end font-semibold text-[#363A43]">

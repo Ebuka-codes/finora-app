@@ -2,14 +2,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
-import {
-  generateReference,
-  generateRquestId,
-  parseServerActionResponse,
-} from "./utils";
+import { parseServerActionResponse } from "./utils";
 import z from "zod";
 
 import { Credentials, FormState } from "@/type";
+import { generateReference, generateRquestId } from "./crypto";
 
 export async function handleDeposit(
   prevState: FormState,
