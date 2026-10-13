@@ -116,7 +116,7 @@ const ConfirmModal = ({
               disabled={isPending}
               onClick={() => setIsOpen(false)}
               type="button"
-              className="relative border border-stone-300  bg-white cursor-pointer space-x-2 text-center font-medium ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none duration-200 hover:bg-stone-100 w-full flex items-center justify-center text-[12px] px-4 py-2 h-13 rounded-2xl"
+              className="relative border border-stone-300  bg-white cursor-pointer space-x-2 text-center font-medium ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none duration-200 hover:shadow-sm w-full flex items-center justify-center text-[12px] px-4 py-2 h-13 rounded-2xl"
             >
               {" "}
               <span className="truncate font-semibold">Cancel</span>{" "}

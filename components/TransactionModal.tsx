@@ -49,7 +49,7 @@ const TransactionModal = ({
           className="relative data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 bg-white z-20000  max-w-screen shadow-md rounded-2xl mx-auto w-[90%] lg:w-[95%] md:w-[70%] sm:w-[70%] p-0 gap-0 pb-5 block! pointer-none:"
         >
           <div className="flex flex-col gap-1.5 text-left py-5 px-4 md:px-6 border-b border-b-stone-200">
-            <h2 className="text-[15px] leading-none font-medium">
+            <h2 className="text-[16px] leading-none font-medium">
               <p className="wrap-break-word">
                 <span>Transaction Details</span>
                 <span></span>
@@ -57,12 +57,12 @@ const TransactionModal = ({
             </h2>
           </div>
 
-          <h2 className="text-[14px] uppercase px-6  my-6 font-medium">
+          <h2 className="text-[13px] uppercase px-6  my-6 font-medium">
             {formattedDate(movement.created_at)}
           </h2>
 
-          <div className="rounded-lg bg-stone-100 px-6 mx-5 my-6">
-            <div className="grid grid-cols-3 border-b border-stone-100 py-6 align-middle text-[13px]">
+          <div className="rounded-lg bg-[#F7F7F7] px-6 mx-5 my-6">
+            <div className="grid grid-cols-3 border-b border-stone-200 py-6 align-middle text-[13px]">
               <span className="block text-[#667085]">Amount</span>
               <span className="col-span-2 block max-w-[80%] text-end font-semibold text-[#363A43]">
                 {isCredit ? "+" : "-"}
@@ -70,7 +70,7 @@ const TransactionModal = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-3 border-b border-stone-100 py-6 align-middle text-[13px]">
+            <div className="grid grid-cols-3 border-b border-stone-200 py-6 align-middle text-[13px]">
               <span className="block text-[#667085]">Narration</span>
               <span className="col-span-2 uppercase  block max-w-[80%] text-end font-semibold text-[#363A43]">
                 {getTransactionTitle(movement)}
@@ -89,7 +89,7 @@ const TransactionModal = ({
               data-size="medium"
               onClick={() => setIsOpen(false)}
               type="button"
-              className="relative border w-60 mx-auto border-stone-300  bg-white cursor-pointer space-x-2 text-center font-medium ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none duration-200 hover:bg-stone-100  flex items-center justify-center text-[12px] px-4 py-2 h-14 rounded-2xl"
+              className="relative border w-60 mx-auto border-stone-300  bg-white cursor-pointer space-x-2 text-center font-medium ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none duration-200 hover:shadow-sm  flex items-center justify-center text-[12px] px-4 py-2 h-14 rounded-2xl"
             >
               {" "}
               <span className="truncate font-semibold">Cancel</span>{" "}
