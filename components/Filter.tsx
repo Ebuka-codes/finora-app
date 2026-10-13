@@ -1,5 +1,6 @@
 "use client";
 
+import { Route } from "next";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Period = "all" | "1days" | "30days";
@@ -32,9 +33,11 @@ const Filter = ({ selectedPeriod }: FilterProps) => {
 
     const query = params.toString();
 
-    router.push(query ? `${pathname}?${query}` : pathname, {
-      scroll: false,
-    });
+    // const url = `${pathname}?${query}` as Route;
+
+    // router.push(query ? url : pathname, {
+    //   scroll: false,
+    // });
   };
 
   return (

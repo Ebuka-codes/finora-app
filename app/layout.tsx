@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#f3f4f4] md:bg-stone-50`}>
+      <body className={`${inter.className} bg-[#f5f7f8] `}>
         <div>{children}</div>
         <Toaster position="top-right" />
       </body>

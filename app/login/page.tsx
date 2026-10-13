@@ -23,7 +23,7 @@ const Login = async () => {
             </h1>
 
             <p className="mt-2 text-[14px] text-slate-500">
-              Sign in to access your Bankist account
+              Sign in to access your Finora account
             </p>
           </div>
           <LoginForm />

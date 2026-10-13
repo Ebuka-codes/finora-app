@@ -23,7 +23,6 @@ const AccountSummary = async () => {
 
     if (res.data) {
       const { data } = await getMovementByAccountId(res.data.id);
-      console.log(data);
 
       if (data) {
         balance = data.reduce((total, movement) => total + movement.amount, 0);

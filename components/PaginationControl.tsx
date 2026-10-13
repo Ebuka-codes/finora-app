@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Route } from "next";
 
 type PaginationControlsProps = {
   currentPage: number;
@@ -29,9 +30,10 @@ const PaginationControls = ({
     params.set("page", String(page));
 
     setLoadingPage(page);
+    const url = `${pathname}?${params.toString()}` as Route;
 
     startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`, {
+      router.push(url, {
         scroll: false,
       });
     });
